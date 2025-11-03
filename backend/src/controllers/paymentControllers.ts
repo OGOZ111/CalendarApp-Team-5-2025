@@ -2,9 +2,7 @@ import express, { Request, Response } from "express";
 import stripePackage from "stripe";
 import * as admin from "firebase-admin";
 
-const stripe = new stripePackage(
-  "sk_test_51P32IZP7WrlB8etah6fHU1BNPacwJlR8XNFQ4qBIuRlPaYjQSMRXacQZ66A30vDYRQkOh2PPqLWmZc2YRiY3PgCS00FzGWVXgz"
-);
+const stripe = new stripePackage(process.env.STRIPE_SECRET_KEY as string);
 
 // Route for webhook listening for payment events
 // Stripe webhook handler
@@ -15,7 +13,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
     event = stripe.webhooks.constructEvent(
       req.body,
       req.headers["stripe-signature"] as string,
-      process.env.endpointSecret as string
+      process.env.STRIPE_WEBHOOK_SECRET as string
     );
   } catch (err: any) {
     return res.status(400).send(`Webhook Error: ${err.message}`);

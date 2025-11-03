@@ -5,10 +5,10 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
 import morgan from "morgan";
-import logger from "../src/utils/logger";
-import getDatabase from "../src/config/database";
-import authRoutes from "../src/routes/authRoutes";
-import paymentRoutes from "../src/routes/PaymentRoutes";
+import logger from "./utils/logger";
+import getDatabase from "./config/database";
+import authRoutes from "./routes/authRoutes";
+import paymentRoutes from "./routes/PaymentRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 
 const app = express(); // Create an Express application

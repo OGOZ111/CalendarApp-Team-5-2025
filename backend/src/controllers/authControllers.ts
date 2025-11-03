@@ -9,9 +9,7 @@ import * as admin from "firebase-admin";
 import generateTokenAndSetCookie from "../utils/generateToken";
 import { Request, Response } from "express";
 
-const stripe = new stripePackage(
-  "sk_test_51P32IZP7WrlB8etah6fHU1BNPacwJlR8XNFQ4qBIuRlPaYjQSMRXacQZ66A30vDYRQkOh2PPqLWmZc2YRiY3PgCS00FzGWVXgz"
-);
+const stripe = new stripePackage(process.env.STRIPE_SECRET_KEY as string);
 
 interface Calendar {
   title: string;
@@ -149,7 +147,7 @@ export const deleteUserAndData = async (req: Request, res: Response) => {
     const { uid } = req.params;
 
     // Remove images associated with the user from Firebase Storage
-    const bucket = admin.storage().bucket("prac-team5.appspot.com");
+  const bucket = admin.storage().bucket();
     const imagesDir = "images/";
 
     // List all files in the images directory
