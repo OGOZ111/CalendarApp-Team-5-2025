@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterPage = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const loadingToastId = toast.loading('Registering...');
+    const loadingToastId = toast.loading("Registering...");
 
     e.preventDefault();
     if (!isRegistering) {
       if (password !== confirmPassword) {
         // Check if passwords match before sending request to backend
-        setErrorMessage('Passwords do not match'); // Set error message if passwords do not match
+        setErrorMessage("Passwords do not match"); // Set error message if passwords do not match
 
         // Show toast message with error message if passwords do not match
         toast.update(loadingToastId, {
-          render: errorMessage || 'An error occurred. Please try again.',
-          type: 'error',
+          render: errorMessage || "An error occurred. Please try again.",
+          type: "error",
           isLoading: false,
           autoClose: 2000,
         });
@@ -36,20 +36,20 @@ const RegisterPage = () => {
       setIsRegistering(true);
       try {
         // Send POST request to backend for user registration
-        await axios.post('http://localhost:8080/auth/register', {
+        await axios.post("http://localhost:8080/auth/register", {
           email,
           password,
           displayName,
-          status: 'free',
+          status: "free",
         });
 
         // Show toast message if registration is successful
         toast.update(loadingToastId, {
-          render: 'Registering successful! Redirecting to Login...',
-          type: 'success',
+          render: "Registering successful! Redirecting to Login...",
+          type: "success",
           isLoading: false,
           autoClose: 2000,
-          onClose: () => router.push('/login'),
+          onClose: () => router.push("/login"),
         });
       } catch (error: any) {
         setErrorMessage(error.response.data.error);
@@ -57,8 +57,8 @@ const RegisterPage = () => {
 
         // Show toast message with error message if registration fails
         toast.update(loadingToastId, {
-          render: errorMessage || 'An error occurred. Please try again.',
-          type: 'error',
+          render: errorMessage || "An error occurred. Please try again.",
+          type: "error",
           isLoading: false,
           autoClose: 2000,
         });

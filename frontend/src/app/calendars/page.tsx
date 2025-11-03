@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@/contexts/AuthContext';
-import CalendarCard from '../../components/CalendarCard';
-import { fontTitle } from '../utilities/font';
-import { BsInfoCircle } from 'react-icons/bs';
-import Link from 'next/link';
-import { getDatabase, ref, onValue } from 'firebase/database';
-import Spinner from '@/components/loadingSpinner';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts/AuthContext";
+import CalendarCard from "../../components/CalendarCard";
+import { fontTitle } from "../utilities/font";
+import { BsInfoCircle } from "react-icons/bs";
+import Link from "next/link";
+import { getDatabase, ref, onValue } from "firebase/database";
+import Spinner from "@/components/loadingSpinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type CalendarData = {
   title: string;
@@ -21,14 +21,14 @@ type CalendarData = {
 const CalendarsPage = () => {
   const router = useRouter();
   const { isLoggedIn, uid } = useAuthContext();
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<string | null>(null);
 
   // Redirect to the homepage if the user is not logged in
   useEffect(() => {
     if (!isLoggedIn) {
-      router.replace('/');
+      router.replace("/");
     }
   }, [isLoggedIn, router]);
 
@@ -69,9 +69,11 @@ const CalendarsPage = () => {
     if (!uid) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/calendar/getcalendars/${uid}`);
+      const response = await fetch(
+        `http://localhost:8080/calendar/getcalendars/${uid}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch calendars');
+        throw new Error("Failed to fetch calendars");
       }
       const data = await response.json();
       // If no calendars are fetched, return an empty array
@@ -84,7 +86,7 @@ const CalendarsPage = () => {
       }));
       return calendarsArray;
     } catch (error) {
-      console.error('Error fetching calendars:', error);
+      console.error("Error fetching calendars:", error);
     }
   };
 
@@ -97,7 +99,7 @@ const CalendarsPage = () => {
     id: string;
     title: string;
     backgroundUrl: string;
-  }>({ id: '', title: '', backgroundUrl: '' });
+  }>({ id: "", title: "", backgroundUrl: "" });
 
   // When a card button is clicked, handleAction sets the selected card and performs the chosen action
   const handleAction = (id: string, action: string) => {
@@ -106,43 +108,43 @@ const CalendarsPage = () => {
     setSelectedCard(selected!);
 
     // Navigate to the single calendar page and sending the cal id
-    if (action === 'show') {
+    if (action === "show") {
       router.push(`/calendar/${uid}/${id}`);
     }
 
     // Open the delete modal for more actions
-    if (action === 'delete') {
+    if (action === "delete") {
       openDeleteModal();
     }
 
     // Navigate to the edit page - also needs id???
-    if (action === 'edit') {
+    if (action === "edit") {
       router.push(`/edit/${id}`);
     }
 
     // Copy the URL of the calendar to the clipboard
-    if (action === 'share') {
-      const loadingToastId = toast.loading('Copying link...');
+    if (action === "share") {
+      const loadingToastId = toast.loading("Copying link...");
 
       const url = `${window.location.origin}/calendar/${uid}/${id}`;
       navigator.clipboard
         .writeText(url)
         .then(() => {
-          console.log('URL copied to clipboard successfully!');
+          console.log("URL copied to clipboard successfully!");
           // Show toast message if copying is successful
           toast.update(loadingToastId, {
-            render: 'URL copied to clipboard successfully!',
-            type: 'success',
+            render: "URL copied to clipboard successfully!",
+            type: "success",
             isLoading: false,
             autoClose: 2000,
           });
         })
         .catch((err) => {
-          console.error('Could not copy text: ', err);
+          console.error("Could not copy text: ", err);
           // Show toast message with error message if copying fails
           toast.update(loadingToastId, {
-            render: 'Could not copy text.',
-            type: 'error',
+            render: "Could not copy text.",
+            type: "error",
             isLoading: false,
             autoClose: 2000,
           });
@@ -151,7 +153,7 @@ const CalendarsPage = () => {
   };
 
   const openDeleteModal = () => {
-    const modal = document.getElementById('delete_modal') as HTMLDialogElement;
+    const modal = document.getElementById("delete_modal") as HTMLDialogElement;
     if (modal) {
       modal.showModal();
     }
@@ -159,18 +161,24 @@ const CalendarsPage = () => {
 
   const deleteCalendar = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/calendar/deletecalendar/${uid}/${selectedCard.id}`, { method: 'DELETE' });
+      const response = await fetch(
+        `http://localhost:8080/calendar/deletecalendar/${uid}/${selectedCard.id}`,
+        { method: "DELETE" }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to delete calendar');
+        throw new Error("Failed to delete calendar");
       }
 
       console.log(`Deleted calendar with id: ${selectedCard.id}`);
 
       // Remove the deleted calendar from the local state
-      setCalendarsData(calendarsData?.filter((calendar) => calendar.id !== selectedCard.id) || null);
+      setCalendarsData(
+        calendarsData?.filter((calendar) => calendar.id !== selectedCard.id) ||
+          null
+      );
     } catch (error) {
-      console.error('Error deleting calendar:', error);
+      console.error("Error deleting calendar:", error);
     }
   };
 
@@ -188,7 +196,9 @@ const CalendarsPage = () => {
     <main className="w-full px-4 flex flex-col justify-center items-center gap-10 py-10">
       {!calendarsData && <Spinner />}
 
-      <div className={`${fontTitle} clr-accent text-4xl text-center bg-base`}>{displayName ? `Welcome, ${displayName}!` : 'Welcome!'}</div>
+      <div className={`${fontTitle} clr-accent text-4xl text-center bg-base`}>
+        {displayName ? `Welcome, ${displayName}!` : "Welcome!"}
+      </div>
 
       {/* Info when there's no calendar to show */}
       {calendarsData?.length === 0 && (
@@ -207,7 +217,13 @@ const CalendarsPage = () => {
       {calendarsData && calendarsData.length > 0 && (
         <div className="w-full flex flex-wrap gap-5 justify-center">
           {calendarsData.map((calendar) => (
-            <CalendarCard key={calendar.id} id={calendar.id} title={calendar.title} backgroundUrl={calendar.backgroundUrl} handleAction={handleAction} />
+            <CalendarCard
+              key={calendar.id}
+              id={calendar.id}
+              title={calendar.title}
+              backgroundUrl={calendar.backgroundUrl}
+              handleAction={handleAction}
+            />
           ))}
         </div>
       )}

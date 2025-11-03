@@ -107,7 +107,7 @@ const Header = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/auth/create-checkout-session",
+        "https://backend-final-26y0.onrender.com/auth/create-checkout-session",
         {
           method: "POST",
           headers: {
@@ -151,7 +151,12 @@ const Header = () => {
           {/* Dropdown menu for small screens */}
           <div className="dropdown relative lg:hidden">
             {/* Hamburger icon */}
-            <button className="btn-main-circle">
+            <button
+              type="button"
+              className="btn-main-circle"
+              title="Open menu"
+              aria-label="Open menu"
+            >
               <RiMenu3Fill />
             </button>
             {/* Menu items */}
